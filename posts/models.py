@@ -65,7 +65,7 @@ class Comment(models.Model):
         ordering = ('-date_created',)
 
     def save(self, *args, **kwargs):
-        self.body = ' '.join(self.title.strip().split())
+        self.body = ' '.join(self.body.strip().split())
         super().save(self, *args, **kwargs)
 
 class Like(models.Model):    

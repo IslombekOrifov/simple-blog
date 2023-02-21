@@ -43,9 +43,9 @@ class CustomUser(AbstractUser):
     
 
     def save(self, *args, **kwargs):
-        self.username = ' '.join(self.title.strip().split())
-        self.email = ' '.join(self.title.strip().split())
-        self.phone = ' '.join(self.title.strip().split())
+        self.username = ' '.join(self.username.strip().split())
+        self.email = ' '.join(self.email.strip().split())
+        self.phone = ' '.join(self.phone.strip().split())
         super().save(*args, **kwargs)
 
 
