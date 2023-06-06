@@ -7,19 +7,34 @@ from .services import upload_avatar_path
 
 
 class CustomUser(AbstractUser):
+
+    class LifeStatus(models.TextChoices):
+        SINGLE = 's', 'single'
+        RELATIONSHIP = 'ir', 'In relationship'
+
     email = models.EmailField(blank=True)
-    phone = models.CharField(max_length=13, blank=True, validators=[validate_phone])
+    phone = models.CharField(
+        max_length=13, 
+        blank=True, 
+        validators=[validate_phone]
+    )
 
     REQUIRED_FIELDS = []
 
     avatar = models.ImageField(
-        upload_to=upload_avatar_path, validators=[validate_image], 
+        upload_to=upload_avatar_path, 
+        validators=[validate_image], 
         blank=True, null=True
     )
     about = models.CharField(max_length=255, blank=True)
     birth_date = models.DateField(blank=True, null=True)
     other_skills = models.CharField(max_length=300, blank=True)
-    hobby = models.CharField(max_length=300, blank=True)
+    overview = models.CharField(max_length=300, blank=True)    
+    life_status = models.CharField(
+        max_length=2, 
+        choices=LifeStatus.choices, 
+        default=LifeStatus.SINGLE
+    )
 
     edu1_name = models.CharField(max_length=250, blank=True)
     edu1_direction = models.CharField(max_length=150, blank=True)
@@ -32,7 +47,7 @@ class CustomUser(AbstractUser):
     edu2_start_date = models.DateField(blank=True, null=True)
     edu2_end_date = models.DateField(blank=True, null=True)
     edu2_now = models.BooleanField(default=False)
-    
+
     is_deleted = models.BooleanField(default=False)
 
 
@@ -49,3 +64,17 @@ class CustomUser(AbstractUser):
         super().save(*args, **kwargs)
 
 
+class Experience(models.Model):
+    user = models.ForeignKey(CustomUser, related_name='experiences', on_delete=models.CASCADE)
+    
+    role = models.CharField(max_length=150)
+    company = models.CharField(max_length=150)
+    work_start_date = models.DateField()
+    work_end_date = models.DateField(blank=True, null=True)
+    work_now = models.BooleanField(default=False)
+    work_duties = models.CharField(max_length=500, blank=True)
+
+    date_created = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.role

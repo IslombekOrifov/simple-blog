@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}My - settings{% endblock title %}
+
+{% comment %} <!-- Google Font -->
+<link rel="preconnect" href="../fonts.googleapis.com/index.html">
+<link rel="stylesheet" href="../fonts.googleapis.com/css2ab8c.css?family=Inter:wght@300;400;500;600;700&amp;display=swap"> {% endcomment %}
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'vendor/font-awesome/css/all.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'vendor/choices.js/public/assets/styles/choices.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'vendor/dropzone/dist/dropzone.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'vendor/flatpickr/dist/flatpickr.css' %}">
+{% endblock styles %}
+    
+
+
+
+{% block content %}
+  <!-- Container START -->
+  <div class="container">
+    <div class="row">
+
+      <!-- Sidenav START -->
+      <div class="col-lg-3">
+
+        <!-- Advanced filter responsive toggler START -->
+				<!-- Divider -->
+				<div class="d-flex align-items-center mb-4 d-lg-none">
+					<button class="border-0 bg-transparent" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+						<span class="btn btn-primary"><i class="fa-solid fa-sliders-h"></i></span>
+            <span class="h6 mb-0 fw-bold d-lg-none ms-2">Settings</span>
+					</button>
+				</div>
+				<!-- Advanced filter responsive toggler END -->
+
+        <nav class="navbar navbar-light navbar-expand-lg mx-0">
+          <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar">
+            <!-- Offcanvas header -->
+						<div class="offcanvas-header">
+							<button type="button" class="btn-close text-reset ms-auto" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+						</div>
+
+            <!-- Offcanvas body -->
+            <div class="offcanvas-body p-0">
+              <!-- Card START -->
+              <div class="card w-100">
+                <!-- Card body START -->
+                <div class="card-body">
+
+                <!-- Side Nav START -->
+                <ul class="nav nav-tabs nav-pills nav-pills-soft flex-column fw-bold gap-2 border-0">
+                  <li class="nav-item" data-bs-dismiss="offcanvas">
+                    <a class="nav-link d-flex mb-0 {% if settings_menu_title == 'account' %}active{% endif %}" href="{% url 'accounts:settings_account' %}"> <img class="me-2 h-20px fa-fw" src="{% static 'images/icon/person-outline-filled.svg' %}" alt=""><span>Account </span></a>
+                  </li>
+                  <li class="nav-item" data-bs-dismiss="offcanvas">
+                    <a class="nav-link d-flex mb-0 {% if settings_menu_title == 'password-change' %}active{% endif %}" href="{% url 'accounts:password_change' %}"> <img class="me-2 h-20px fa-fw" src="{% static 'images/icon/padlock-icon.svg' %}" alt=""><span>Change Password </span></a>
+                  </li>
+                  <li class="nav-item" data-bs-dismiss="offcanvas">
+                    <a class="nav-link d-flex mb-0 {% if settings_menu_title == 'notifications' %}active{% endif %}" href="{% url 'accounts:settings_notifications' %}"> <img class="me-2 h-20px fa-fw" src="{% static 'images/icon/notification-outlined-filled.svg' %}" alt=""><span>Notification </span></a>
+                  </li>
+                  <li class="nav-item" data-bs-dismiss="offcanvas">
+                    <a class="nav-link d-flex mb-0 {% if settings_menu_title == 'privacy' %}active{% endif %}" href="{% url 'accounts:settings_privacy' %}"> <img class="me-2 h-20px fa-fw" src="{% static 'images/icon/shield-outline-filled.svg' %}" alt=""><span>Privacy and safety </span></a>
+                  </li>
+                  <li class="nav-item" data-bs-dismiss="offcanvas">
+                    <a class="nav-link d-flex mb-0 {% if settings_menu_title == 'communications' %}active{% endif %}" href="{% url 'accounts:settings_communications' %}"> <img class="me-2 h-20px fa-fw" src="{% static 'images/icon/handshake-outline-filled.svg' %}" alt=""><span>Communications </span></a>
+                  </li>
+                  <li class="nav-item" data-bs-dismiss="offcanvas">
+                    <a class="nav-link d-flex mb-0 {% if settings_menu_title == 'messaging' %}active{% endif %}" href="{% url 'accounts:settings_messaging' %}"> <img class="me-2 h-20px fa-fw" src="{% static 'images/icon/chat-alt-outline-filled.svg' %}" alt=""><span>Messaging </span></a>
+                  </li>
+                  <li class="nav-item" data-bs-dismiss="offcanvas">
+                    <a class="nav-link d-flex mb-0 {% if settings_menu_title == 'close_account' %}active{% endif %}" href="{% url 'accounts:settings_close_account' %}"> <img class="me-2 h-20px fa-fw" src="{% static 'images/icon/trash-var-outline-filled.svg' %}" alt=""><span>Close account </span></a>
+                  </li>
+                </ul>
+                <!-- Side Nav END -->
+
+              </div>
+              <!-- Card body END -->
+              <!-- Card footer -->
+              <div class="card-footer text-center py-2">
+                <a class="btn btn-link text-secondary btn-sm" href="{% url 'accounts:my_profile' %}">View Profile </a>
+              </div>
+              </div>
+            <!-- Card END -->
+            </div>
+            <!-- Offcanvas body -->
+
+            <!-- Helper link START -->
+            <ul class="nav small mt-4 justify-content-center lh-1">
+              <li class="nav-item">
+                <a class="nav-link" href="my-profile-about.html">About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="settings.html">Settings</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" target="_blank" href="https://support.webestica.com/login">Support </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" target="_blank" href="docs/index.html">Docs </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="help.html">Help</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="privacy-and-terms.html">Privacy & terms</a>
+              </li>
+            </ul>
+            <!-- Helper link END -->
+            <!-- Copyright -->
+            <p class="small text-center mt-1">©2023 <a class="text-body" target="_blank" href="https://www.webestica.com/"> Webestica </a></p>
+          
+          </div>
+        </nav>
+      </div>
+      <!-- Sidenav END -->
+
+        <!-- Main content START -->
+        <div class="col-lg-6 vstack gap-4">
+          <!-- Setting Tab content START -->
+          <div class="tab-content py-0 mb-0">
+
+            {% block main_setting %}
+              
+            {% endblock %}
+
+          </div>
+          <!-- Setting Tab content END -->
+        </div>
+
+    </div> <!-- Row END -->
+  </div>
+  <!-- Container END -->
+{% endblock %}
+
+
+<!-- Modal login activity START -->
+{% block modals %}
+  <div class="modal fade" id="modalLoginActivity" tabindex="-1" aria-labelledby="modalLabelLoginActivity" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal header -->
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalLabelLoginActivity">Where You're Logged in </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <ul class="list-group list-group-flush">
+            <!-- location list item -->
+            <li class="list-group-item d-flex justify-content-between align-items-center px-0 pb-3">
+              <div class="me-2">
+                <h6 class="mb-0">London, UK</h6>
+                <ul class="nav nav-divider small">
+                  <li class="nav-item">Active now </li>
+                  <li class="nav-item">This Apple iMac </li>
+                </ul>
+              </div>
+              <button class="btn btn-sm btn-primary-soft"> Logout </button>
+            </li>
+            <!-- location list item -->
+            <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3">
+              <div class="me-2">
+                <h6 class="mb-0">California, USA</h6>
+                <ul class="nav nav-divider small">
+                  <li class="nav-item">Active now </li>
+                  <li class="nav-item">This Apple iMac </li>
+                </ul>
+              </div>
+              <button class="btn btn-sm btn-primary-soft"> Logout </button>
+            </li>
+            <!-- location list item -->
+            <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3">
+              <div class="me-2">
+                <h6 class="mb-0">New york, USA</h6>
+                <ul class="nav nav-divider small">
+                  <li class="nav-item">Active now </li>
+                  <li class="nav-item">This Windows </li>
+                </ul>
+              </div>
+              <button class="btn btn-sm btn-primary-soft"> Logout </button>
+            </li>
+            <!-- location list item -->
+            <li class="list-group-item d-flex justify-content-between align-items-center px-0 pt-3">
+              <div class="me-2">
+                <h6 class="mb-0">Mumbai, India</h6>
+                <ul class="nav nav-divider small">
+                  <li class="nav-item">Active now </li>
+                  <li class="nav-item">This Windows </li>
+                </ul>
+              </div>
+              <button class="btn btn-sm btn-primary-soft"> Logout </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock modals %}
+<!-- Modal login activity END -->
+
+
+
+{% block script %}
+  <!-- Bootstrap JS -->
+  <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+
+  <!-- Vendors -->
+  <script src="{% static 'vendor/choices.js/public/assets/scripts/choices.min.js' %}"></script>
+  <script src="{% static 'vendor/dropzone/dist/dropzone.js' %}"></script>
+  <script src="{% static 'vendor/flatpickr/dist/flatpickr.min.js' %}"></script>
+  <script src="{% static 'vendor/pswmeter/pswmeter.min.js' %}"></script>
+{% endblock %}
