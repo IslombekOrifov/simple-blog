@@ -4,9 +4,15 @@ from django.contrib.auth import authenticate, login, views as auth_views
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.contrib.auth import views as auth_views
+from django.views.generic import UpdateView
 
 
-from .forms import LoginForm, UserRegisterForm
+from .models import Experience
+from .forms import (
+    LoginForm, UserRegisterForm, UserProfileEdit,
+    UserExperienceForm,
+
+)
 
 
 def register(request):
@@ -38,16 +44,16 @@ def register(request):
 
 class CustomPasswordChangeView(auth_views.PasswordChangeView):
     success_url = reverse_lazy("accounts:password_change")
-
-    
+   
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['password_change_done'] = "Your passwod has been changed successfully"
         return context
-    
+   
 
 class CustomPasswordResetView(auth_views.PasswordResetView):
     success_url = reverse_lazy("accounts:password_reset_done")
+
 
 class CustomPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
     success_url = reverse_lazy("accounts:password_reset_complete")
@@ -61,8 +67,31 @@ def index(request):
 
 @login_required
 def settings_account(request):
+    exper = Experience.objects.filter(user=request.user).last()
+    if request.method == 'POST':
+        user_form = UserProfileEdit(
+            instance=request.user, data=request.POST, files=request.FILES
+        )
+        if exper:
+            exper_form = UserExperienceForm(
+                instance=exper,
+                data=request.POST
+                )
+        else:
+            exper_form = UserExperienceForm(data=request.POST)
+        if user_form.is_valid():
+            user_form.save()
+    else:
+        user_form = UserProfileEdit(instance=request.user)
+        if exper:
+            exper_form = UserExperienceForm(instance=exper)
+        else:
+            exper_form = UserExperienceForm()
+
     context = {
         'settings_menu_title': "account",
+        'user_form': user_form,
+        'exper_form': exper_form,
     }
     return render(request, 'accounts/settings/settings-account.html', context)
 

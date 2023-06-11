@@ -1,4 +1,5 @@
 {% extends 'accounts/settings-base.html' %}
+{% load widget_tweaks %}
 
 {% block main_setting %}
     <!-- Account setting tab START -->
@@ -11,64 +12,164 @@
         <h1 class="h5 card-title">Account Settings</h1>
         <p class="mb-0">He moonlights difficult engrossed it, sportsmen. Interested has all Devonshire difficulty gay assistance joy. Unaffected at ye of compliment alteration to.</p>
         </div>
+
+        <p class="mb-0">{{ user_form.errors }}</p>
+        
         <!-- Card header START -->
         <!-- Card body START -->
         <div class="card-body">
         <!-- Form settings START -->
-        <form class="row g-3">
+        <form class="row g-3", method="post" enctype='multipart/form-data'>
+            {% csrf_token %}
             <!-- First name -->
             <div class="col-sm-6 col-lg-4">
             <label class="form-label">First name</label>
-            <input type="text" class="form-control" placeholder="" value="Sam">
+           {% if user_form.first_name.errors %}<p>{{ user_form.first_name.errors }}</p>{% endif %}
+            {% render_field user_form.first_name type="text" class="form-control" %} 
             </div>
             <!-- Last name -->
             <div class="col-sm-6 col-lg-4">
             <label class="form-label">Last name</label>
-            <input type="text" class="form-control" placeholder="" value="Lanson">
+            {% if user_form.first_name.errors %}<p>{{ user_form.first_name.errors }}</p>{% endif %}
+            {% render_field user_form.last_name type="text" class="form-control" %}
             </div>
-            <!-- Additional name -->
-            <div class="col-sm-6 col-lg-4">
-            <label class="form-label">Additional name</label>
-            <input type="text" class="form-control" placeholder="">
+
+            <div class="col-sm-4">
+                <label class="form-label">Life status {{ user_form.life_status.errors }}</label>
+                {% render_field user_form.life_status type="text" class="form-control" %}
             </div>
+            
             <!-- User name -->
-            <div class="col-sm-6">
-            <label class="form-label">User name</label>
-            <input type="text" class="form-control" placeholder="" value="@samlanson">
+            <div class="col-sm-4">
+            <label class="form-label">Username {{ user_form.username.errors }}</label>
+            {% render_field user_form.username type="text" class="form-control" %}
             </div>
             <!-- Birthday -->
-            <div class="col-lg-6">
+            <div class="col-lg-4">
             <label class="form-label">Birthday </label>
-            <input type="text" class="form-control flatpickr" value="12/12/1990">
+            {% if user_form.birth_date.errors %}<p>{{ user_form.birth_date.errors }}</p>{% endif %}
+            {% render_field user_form.birth_date type="date" class="form-control" placeholder="01.11.1999" %}
             </div>
+            <div class="col-lg-4">
+                <label class="form-label">Image </label>
+                {% if user_form.avatar.errors %}<p>{{ user_form.avatar.errors }}</p>{% endif %}
+                {% render_field user_form.avatar  class="form-control" %}
+                </div>
             <!-- Allow checkbox -->
-            <div class="col-12">
+            {% comment %} <div class="col-12">
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="allowChecked" checked>
                 <label class="form-check-label" for="allowChecked">
                 Allow anyone to add you to their team
                 </label>
             </div>
-            </div>
+            </div> {% endcomment %}
+
             <!-- Phone number -->
             <div class="col-sm-6">
-            <label class="form-label">Phone number</label>
-            <input type="text" class="form-control" placeholder="" value="(678) 324-1251">
-            <!-- Add new number -->
-            <a class="btn btn-sm btn-dashed rounded mt-2" href="#!"> <i class="bi bi-plus-circle-dotted me-1"></i>Add new phone number</a>
+            <label class="form-label">Phone number {{ user_form.phone.errors }}</label>
+            {% render_field user_form.phone type="text" class="form-control" placeholder="+998901234567"%}
             </div>
-            <!-- Phone number -->
+
             <div class="col-sm-6">
-            <label class="form-label">Email</label>
-            <input type="text" class="form-control" placeholder="" value="sam@webestica.com">
-            <!-- Add new email -->
-            <a class="btn btn-sm btn-dashed rounded mt-2" href="#!"> <i class="bi bi-plus-circle-dotted me-1"></i>Add new email address</a>
+            <label class="form-label">Email {{ user_form.email.errors }}</label>
+            {% render_field user_form.email type="email" class="form-control" placeholder="myemail.mysite.com"%}
             </div>
+
+            
             <!-- Page information -->
-            <div class="col-12">
+            <div class="col-6">
             <label class="form-label">Overview</label>
-            <textarea class="form-control" rows="4" placeholder="Description (Required)">Interested has all Devonshire difficulty gay assistance joy. Handsome met debating sir dwelling age material. As style lived he worse dried. Offered related so visitors we private removed. Moderate do subjects to distance.</textarea>
-            <small>Character limit: 300</small>
+            {% if user_form.overview.errors %}<p>{{ user_form.overview.errors }}</p>{% endif %}
+            <textarea class="form-control" name="overview" rows="2">{{ user_form.instance.overview }}</textarea>
+            <small>Character limit: 100</small>
+            </div>
+
+            <div class="col-6">
+                <label class="form-label">About</label>
+                {% if user_form.about.errors %}<p>{{ user_form.about.errors }}</p>{% endif %}
+                <textarea class="form-control" name="about" rows="4">{{ user_form.instance.about }}</textarea>
+                <small>Character limit: 300</small>
+             </div>
+
+             <!-- Phone number -->
+             <h1 class="h5 card-title">Education</h1>
+            <div class="row g-3 edu1">
+                <div class="col-sm-6">
+                    <label class="form-label">Name</label>
+                    {% if user_form.edu1_name.errors %}<p>{{ user_form.edu1_name.errors }}</p>{% endif %}
+                    {% render_field user_form.edu1_name type="text" class="form-control" placeholder=""%}
+                </div>
+
+                <div class="col-sm-6">
+                    <label class="form-label">Direction</label>
+                    {% if user_form.edu1_direction.errors %}<p>{{ user_form.edu1_direction.errors }}</p>{% endif %}
+                    {% render_field user_form.edu1_direction type="text" class="form-control" placeholder=""%}
+                </div>
+        
+                <div class="col-sm-6">
+                    <label class="form-label">Start date</label>
+                    {% if user_form.edu1_start_date.errors %}<p>{{ user_form.edu1_start_date.errors }}</p>{% endif %}
+                    {% render_field user_form.edu1_start_date type="date" class="form-control" placeholder=""%}
+                </div>
+
+                <div class="col-sm-6">
+                    <label class="form-label">End date</label>
+                    {% if user_form.edu1_end_date.errors %}<p>{{ user_form.edu1_end_date.errors }}</p>{% endif %}
+                    {% render_field user_form.edu1_end_date type="date" class="form-control" placeholder=""%}
+                </div>
+                
+                <div class="col-sm-6">
+                    <div class="form-check">
+                        <p></p>
+                        <p>{{ user_form.edu1_now.errors }}</p>
+                        {% render_field user_form.edu1_now class="form-check-input" %}
+                        {% comment %} <input class="form-check-input" type="checkbox" value="" id="allowChecked" checked> {% endcomment %}
+                        <label class="form-check-label" for="allowChecked">
+                        Until now
+                        </label>
+                        
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3 edu2">
+                <h1 class="h5 card-title">Education 2</h1>
+                <div class="col-sm-6">
+                    <label class="form-label">Name</label>
+                    {% if user_form.edu2_name.errors %}<p>{{ user_form.edu2_name.errors }}</p>{% endif %}
+                    {% render_field user_form.edu2_name type="text" class="form-control" placeholder=""%}
+                </div>
+
+                <div class="col-sm-6">
+                    <label class="form-label">Direction</label>
+                    {% if user_form.edu2_direction.errors %}<p>{{ user_form.edu2_direction.errors }}</p>{% endif %}
+                    {% render_field user_form.edu2_direction type="text" class="form-control" placeholder=""%}
+                </div>
+                <div class="col-sm-6">
+                    <label class="form-label">Start date</label>
+                    {% if user_form.edu2_start_date.errors %}<p>{{ user_form.edu2_start_date.errors }}</p>{% endif %}
+                    {% render_field user_form.edu2_start_date type="date" class="form-control" placeholder=""%}
+                </div>
+
+                <div class="col-sm-6">
+                    <label class="form-label">End date</label>
+                    {% if user_form.edu2_end_date.errors %}<p>{{ user_form.edu2_end_date.errors }}</p>{% endif %}
+                    {% render_field user_form.edu2_end_date type="date" class="form-control" placeholder=""%}
+                </div>
+                
+                <div class="col-sm-6">
+                    <div class="form-check">
+                        <p></p>
+                        <p>{{ user_form.edu2_now.errors }}</p>
+                        {% render_field user_form.edu1_now class="form-check-input" %}
+                        {% comment %} <input class="form-check-input" type="checkbox" value="" id="allowChecked" checked> {% endcomment %}
+                        <label class="form-check-label" for="allowChecked">
+                        Until now
+                        </label>
+                        
+                    </div>
+                </div>
             </div>
             <!-- Button  -->
             <div class="col-12 text-end">
@@ -85,40 +186,60 @@
     <div class="card">
         <!-- Title START -->
         <div class="card-header border-0 pb-0">
-        <h5 class="card-title">Change your password</h5>
+        <h5 class="card-title">Last Experience</h5>
         <p class="mb-0">See resolved goodness felicity shy civility domestic had but.</p>
+        <p class="mb-0">{{ exper_form.errors }}</p>
         </div>
         <!-- Title START -->
         <div class="card-body">
         <!-- Settings START -->
-        <form class="row g-3">
-            <!-- Current password -->
-            <div class="col-12">
-            <label class="form-label">Current password</label>
-            <input type="text" class="form-control" placeholder="">
+        <form class="row g-3" method='post'>
+            {% csrf_token %}
+            <div class="col-sm-6">
+                <label class="form-label">Company</label>
+                {% render_field exper_form.company type="text" class="form-control" placeholder=""%}
+                {% if exper_form.company.errors %}<p>{{ exper_form.company.errors }}</p>{% endif %}
             </div>
-            <!-- New password -->
-            <div class="col-12">
-            <label class="form-label">New password</label>
-            <!-- Input group -->
-            <div class="input-group">
-                <input class="form-control fakepassword" type="password" id="psw-input" placeholder="Enter new password">
-                <span class="input-group-text p-0">
-                <i class="fakepasswordicon fa-solid fa-eye-slash cursor-pointer p-2 w-40px"></i>
-                </span>
+
+            <div class="col-sm-6">
+                <label class="form-label">Role</label>
+                {% if exper_form.role.errors %}<p>{{ exper_form.role.errors }}</p>{% endif %}
+                {% render_field exper_form.role type="text" class="form-control" placeholder=""%}
             </div>
-            <!-- Pswmeter -->
-            <div id="pswmeter" class="mt-2"></div>
-            <div id="pswmeter-message" class="rounded mt-1"></div>
+            <div class="col-sm-6">
+                <label class="form-label">Start date</label>
+                {% if exper_form.work_start_date.errors %}<p>{{ exper_form.work_start_date.errors }}</p>{% endif %}
+                {% render_field exper_form.work_start_date type="date" class="form-control" placeholder=""%}
+            </div>
+
+            <div class="col-sm-6">
+                <label class="form-label">End date</label>
+                {% if exper_form.work_end_date.errors %}<p>{{ exper_form.work_end_date.errors }}</p>{% endif %}
+                {% render_field exper_form.work_end_date type="date" class="form-control" placeholder=""%}
+            </div>
+            
+            <div class="col-sm-6">
+                <div class="form-check">
+                    <p></p>
+                    <p>{{ exper_form.work_now.errors }}</p>
+                    {% render_field exper_form.work_now class="form-check-input" %}
+                    {% comment %} <input class="form-check-input" type="checkbox" value="" id="allowChecked" checked> {% endcomment %}
+                    <label class="form-check-label" for="allowChecked">
+                    Until now
+                    </label>
+                    
+                </div>
             </div>
             <!-- Confirm password -->
             <div class="col-12">
-            <label class="form-label">Confirm password</label>
-            <input type="text" class="form-control" placeholder="">
-            </div>
+                <label class="form-label">About</label>
+                {% if exper_form.work_duties.errors %}<p>{{ exper_form.work_duties.errors }}</p>{% endif %}
+                <textarea class="form-control" name="about" rows="4">{{ exper_form.instance.work_duties }}</textarea>
+                <small>Character limit: 300</small>
+             </div>
             <!-- Button  -->
             <div class="col-12 text-end">
-            <button type="submit" class="btn btn-primary mb-0">Update password</button>
+            <button type="submit" class="btn btn-primary mb-0">Update Experience</button>
             </div>
         </form>
         <!-- Settings END -->

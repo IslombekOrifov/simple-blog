@@ -17,7 +17,7 @@ SECRET_KEY = de_config("SECRET_KEY", default="Your Token")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', ]
 
 
 # Application definition
@@ -32,7 +32,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'social_django',
+    "sslserver",
+    
     'widget_tweaks',
+
 ]
 
 MIDDLEWARE = [
@@ -95,6 +99,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'accounts.authentication.EmailAuthBackend',
+]
+
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
@@ -117,6 +126,8 @@ LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 
+DATE_INPUT_FORMATS = ('%d-%m-%Y','%Y-%m-%d')
+
 USE_I18N = True
 
 USE_TZ = True
@@ -130,6 +141,9 @@ STATICFILES_DIRS = [
     BASE_DIR, 'static_all',
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

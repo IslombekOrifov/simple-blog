@@ -1,5 +1,8 @@
 from django import forms 
-from .models import CustomUser
+from django.conf import settings
+
+from .models import CustomUser, Experience
+
 
 
 class LoginForm(forms.Form):
@@ -21,7 +24,22 @@ class UserRegisterForm(forms.ModelForm):
             raise forms.ValidationError('Passwords don\'t match.' )
         return cd['password2']
     
-class UserProfile(forms.ModelForm):
+class UserProfileEdit(forms.ModelForm):
+    birth_date = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS, required=False)
     class Meta:
         model = CustomUser
-        exclude = ['is_staff', 'is_active', 'date_joined', 'is_deleted']
+        exclude = ['is_staff', 'is_active', 'date_joined', 'is_deleted', 'password']
+
+    def clean_email(self):
+        data = self.cleaned_data['email']
+        qs = CustomUser.objects.exclude(id=self.instance.id).filter(email=data)
+        if qs.exists():
+            return forms.ValidationError("Email already in use")
+        return data
+    
+
+class UserExperienceForm(forms.ModelForm):
+    birth_date = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS, required=False)
+    class Meta:
+        model = Experience
+        exclude = ['user', 'date_created',]

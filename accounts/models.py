@@ -26,10 +26,10 @@ class CustomUser(AbstractUser):
         validators=[validate_image], 
         blank=True, null=True
     )
-    about = models.CharField(max_length=255, blank=True)
+    about = models.CharField(max_length=300, blank=True)
     birth_date = models.DateField(blank=True, null=True)
     other_skills = models.CharField(max_length=300, blank=True)
-    overview = models.CharField(max_length=300, blank=True)    
+    overview = models.CharField(max_length=100, blank=True)    
     life_status = models.CharField(
         max_length=2, 
         choices=LifeStatus.choices, 
@@ -56,6 +56,14 @@ class CustomUser(AbstractUser):
             return f"{self.get_full_name()}"
         return f'{self.email} > {self.username}'
     
+    def get_full_name(self):
+        """
+        Return the first_name plus the last_name, with a space in between.
+        """
+        full_name = "%s %s" % (self.first_name, self.last_name)
+        if full_name == ' ':
+            return self.username
+        return full_name.strip()
 
     def save(self, *args, **kwargs):
         self.username = ' '.join(self.username.strip().split())
@@ -72,7 +80,7 @@ class Experience(models.Model):
     work_start_date = models.DateField()
     work_end_date = models.DateField(blank=True, null=True)
     work_now = models.BooleanField(default=False)
-    work_duties = models.CharField(max_length=500, blank=True)
+    work_duties = models.CharField(max_length=300, blank=True)
 
     date_created = models.DateField(auto_now_add=True)
 
