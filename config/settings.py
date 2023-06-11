@@ -102,6 +102,7 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'accounts.authentication.EmailAuthBackend',
+    'social_core.backends.facebook.FacebookOAuth2',
 ]
 
 
@@ -155,3 +156,9 @@ LOGIN_REDIRECT_URL = '/accounts/'
 # LOGOUT_REDIRECT_URL = reverse('accounts:logout')
 LOGIN_URL = '/accounts/login/'
 LOGOUT_URL = '/accounts/logout/'
+
+
+SOCIAL_AUTH_FACEBOOK_KEY = de_config("SOCIAL_AUTH_FACEBOOK_KEY", default="Your KEY")
+SOCIAL_AUTH_FACEBOOK_SECRET = de_config("SOCIAL_AUTH_FACEBOOK_SECRET", default="Your SECRET")
+
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
