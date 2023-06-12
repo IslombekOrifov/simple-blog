@@ -24,11 +24,25 @@ class UserRegisterForm(forms.ModelForm):
             raise forms.ValidationError('Passwords don\'t match.' )
         return cd['password2']
     
-class UserProfileEdit(forms.ModelForm):
+class CustomUserEdit(forms.ModelForm):
     birth_date = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS, required=False)
     class Meta:
         model = CustomUser
-        exclude = ['is_staff', 'is_active', 'date_joined', 'is_deleted', 'password']
+        exclude = ['first_login', 'is_staff', 'is_active', 'date_joined', 'is_deleted', 'password']
+
+    def clean_email(self):
+        data = self.cleaned_data['email']
+        qs = CustomUser.objects.exclude(id=self.instance.id).filter(email=data)
+        if qs.exists():
+            return forms.ValidationError("Email already in use")
+        return data
+    
+
+class ProfileEdit(forms.ModelForm):
+    birth_date = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS, required=False)
+    class Meta:
+        model = CustomUser
+        exclude = ['user',]
 
     def clean_email(self):
         data = self.cleaned_data['email']

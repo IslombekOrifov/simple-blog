@@ -7,11 +7,10 @@ from django.contrib.auth import views as auth_views
 from django.views.generic import UpdateView
 
 
-from .models import Experience
+from .models import Experience, CustomUser, Profile
 from .forms import (
-    LoginForm, UserRegisterForm, UserProfileEdit,
-    UserExperienceForm,
-
+    LoginForm, UserRegisterForm, CustomUserEdit,
+    ProfileEdit, UserExperienceForm,
 )
 
 
@@ -23,11 +22,11 @@ def register(request):
             new_user = form.save(commit=False)
             new_user.set_password(cd['password'])
             new_user.save()
+            Profile.objects.create(user=user)
             user = authenticate(
                                 request,
                                 username=cd['username'],
                                 password=cd['password'])
-            
             if user is not None:
                 if user.is_active:
                     login(request, user)
@@ -69,8 +68,11 @@ def index(request):
 def settings_account(request):
     exper = Experience.objects.filter(user=request.user).last()
     if request.method == 'POST':
-        user_form = UserProfileEdit(
+        user_form = CustomUserEdit(
             instance=request.user, data=request.POST, files=request.FILES
+        )
+        profile_form = ProfileEdit(
+            instance=request.user.profile, data=request.POST, files=request.FILES
         )
         if exper:
             exper_form = UserExperienceForm(
@@ -79,10 +81,11 @@ def settings_account(request):
                 )
         else:
             exper_form = UserExperienceForm(data=request.POST)
-        if user_form.is_valid():
+        if user_form.is_valid() and profile_form.save():
             user_form.save()
     else:
-        user_form = UserProfileEdit(instance=request.user)
+        user_form = CustomUserEdit(instance=request.user)
+        profile_form = ProfileEdit(instance=request.user.profile)
         if exper:
             exper_form = UserExperienceForm(instance=exper)
         else:
@@ -91,6 +94,7 @@ def settings_account(request):
     context = {
         'settings_menu_title': "account",
         'user_form': user_form,
+        'profile_form': profile_form,
         'exper_form': exper_form,
     }
     return render(request, 'accounts/settings/settings-account.html', context)

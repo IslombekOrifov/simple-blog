@@ -1,17 +1,23 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator
+from django.utils.translation import gettext_lazy as _
+from uuid import uuid4
 
 from .validators import validate_phone, validate_image
 from .services import upload_avatar_path
 
 
 class CustomUser(AbstractUser):
+    """ Custom user model """
 
-    class LifeStatus(models.TextChoices):
-        SINGLE = 's', 'single'
-        RELATIONSHIP = 'ir', 'In relationship'
-
+    custom_id = models.CharField(
+        max_length=12,
+        db_index=True,
+        error_messages={
+            "unique": _("A product with that custom_id already exists."),
+        },
+    )   # add unique=True,
     email = models.EmailField(blank=True)
     phone = models.CharField(
         max_length=13, 
@@ -21,33 +27,14 @@ class CustomUser(AbstractUser):
 
     REQUIRED_FIELDS = []
 
+    first_login = models.DateField(null=True)
+    middle_name = models.CharField(max_length=50)
     avatar = models.ImageField(
         upload_to=upload_avatar_path, 
         validators=[validate_image], 
         blank=True, null=True
     )
-    about = models.CharField(max_length=300, blank=True)
-    birth_date = models.DateField(blank=True, null=True)
-    other_skills = models.CharField(max_length=300, blank=True)
-    overview = models.CharField(max_length=100, blank=True)    
-    life_status = models.CharField(
-        max_length=2, 
-        choices=LifeStatus.choices, 
-        default=LifeStatus.SINGLE
-    )
-
-    edu1_name = models.CharField(max_length=250, blank=True)
-    edu1_direction = models.CharField(max_length=150, blank=True)
-    edu1_start_date = models.DateField(blank=True, null=True)
-    edu1_end_date = models.DateField(blank=True, null=True)
-    edu1_now = models.BooleanField(default=False)
-
-    edu2_name = models.CharField(max_length=250, blank=True)
-    edu2_direction = models.CharField(max_length=150, blank=True)
-    edu2_start_date = models.DateField(blank=True, null=True)
-    edu2_end_date = models.DateField(blank=True, null=True)
-    edu2_now = models.BooleanField(default=False)
-
+    
     is_deleted = models.BooleanField(default=False)
 
 
@@ -69,6 +56,8 @@ class CustomUser(AbstractUser):
         self.username = ' '.join(self.username.strip().split())
         self.email = ' '.join(self.email.strip().split())
         self.phone = ' '.join(self.phone.strip().split())
+        if self.custom_id == '':
+            self.custom_id == str(uuid4())[-12:]
         super().save(*args, **kwargs)
 
 
@@ -86,3 +75,34 @@ class Experience(models.Model):
 
     def __str__(self):
         return self.role
+    
+
+class Profile(models.Model):
+    """ User's profile datas """
+
+    class LifeStatus(models.TextChoices):
+        SINGLE = 's', 'single'
+        RELATIONSHIP = 'ir', 'In relationship'
+
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='profile')
+    about = models.CharField(max_length=300, blank=True)
+    birth_date = models.DateField(blank=True, null=True)
+    other_skills = models.CharField(max_length=300, blank=True)
+    overview = models.CharField(max_length=100, blank=True)    
+    life_status = models.CharField(
+        max_length=2, 
+        choices=LifeStatus.choices, 
+        default=LifeStatus.SINGLE
+    )
+
+    edu1_name = models.CharField(max_length=250, blank=True)
+    edu1_direction = models.CharField(max_length=150, blank=True)
+    edu1_start_date = models.DateField(blank=True, null=True)
+    edu1_end_date = models.DateField(blank=True, null=True)
+    edu1_now = models.BooleanField(default=False)
+
+    edu2_name = models.CharField(max_length=250, blank=True)
+    edu2_direction = models.CharField(max_length=150, blank=True)
+    edu2_start_date = models.DateField(blank=True, null=True)
+    edu2_end_date = models.DateField(blank=True, null=True)
+    edu2_now = models.BooleanField(default=False)

@@ -33,10 +33,16 @@
             {% if user_form.first_name.errors %}<p>{{ user_form.first_name.errors }}</p>{% endif %}
             {% render_field user_form.last_name type="text" class="form-control" %}
             </div>
+            <!-- Last name -->
+            <div class="col-sm-6 col-lg-4">
+                <label class="form-label">Middle name</label>
+                {% if user_form.middle_name.errors %}<p>{{ user_form.middle_name.errors }}</p>{% endif %}
+                {% render_field user_form.middle_name type="text" class="form-control" %}
+            </div>
 
             <div class="col-sm-4">
-                <label class="form-label">Life status {{ user_form.life_status.errors }}</label>
-                {% render_field user_form.life_status type="text" class="form-control" %}
+                <label class="form-label">Life status {{ profile_form.life_status.errors }}</label>
+                {% render_field profile_form.life_status type="text" class="form-control" %}
             </div>
             
             <!-- User name -->
@@ -47,13 +53,13 @@
             <!-- Birthday -->
             <div class="col-lg-4">
             <label class="form-label">Birthday </label>
-            {% if user_form.birth_date.errors %}<p>{{ user_form.birth_date.errors }}</p>{% endif %}
-            {% render_field user_form.birth_date type="date" class="form-control" placeholder="01.11.1999" %}
+            {% if profile_form.birth_date.errors %}<p>{{ profile_form.birth_date.errors }}</p>{% endif %}
+            {% render_field profile_form.birth_date type="date" class="form-control" placeholder="01.11.1999" %}
             </div>
             <div class="col-lg-4">
                 <label class="form-label">Image </label>
-                {% if user_form.avatar.errors %}<p>{{ user_form.avatar.errors }}</p>{% endif %}
-                {% render_field user_form.avatar  class="form-control" %}
+                {% if profile_form.avatar.errors %}<p>{{ profile_form.avatar.errors }}</p>{% endif %}
+                {% render_field profile_form.avatar  class="form-control" %}
                 </div>
             <!-- Allow checkbox -->
             {% comment %} <div class="col-12">
@@ -80,15 +86,15 @@
             <!-- Page information -->
             <div class="col-6">
             <label class="form-label">Overview</label>
-            {% if user_form.overview.errors %}<p>{{ user_form.overview.errors }}</p>{% endif %}
-            <textarea class="form-control" name="overview" rows="2">{{ user_form.instance.overview }}</textarea>
+            {% if profile_form.overview.errors %}<p>{{ profile_form.overview.errors }}</p>{% endif %}
+            <textarea class="form-control" name="overview" rows="2">{{ profile_form.instance.overview }}</textarea>
             <small>Character limit: 100</small>
             </div>
 
             <div class="col-6">
                 <label class="form-label">About</label>
-                {% if user_form.about.errors %}<p>{{ user_form.about.errors }}</p>{% endif %}
-                <textarea class="form-control" name="about" rows="4">{{ user_form.instance.about }}</textarea>
+                {% if profile_form.about.errors %}<p>{{ profile_form.about.errors }}</p>{% endif %}
+                <textarea class="form-control" name="about" rows="4">{{ profile_form.instance.about }}</textarea>
                 <small>Character limit: 300</small>
              </div>
 
@@ -97,33 +103,33 @@
             <div class="row g-3 edu1">
                 <div class="col-sm-6">
                     <label class="form-label">Name</label>
-                    {% if user_form.edu1_name.errors %}<p>{{ user_form.edu1_name.errors }}</p>{% endif %}
-                    {% render_field user_form.edu1_name type="text" class="form-control" placeholder=""%}
+                    {% if profile_form.edu1_name.errors %}<p>{{ profile_form.edu1_name.errors }}</p>{% endif %}
+                    {% render_field profile_form.edu1_name type="text" class="form-control" placeholder=""%}
                 </div>
 
                 <div class="col-sm-6">
                     <label class="form-label">Direction</label>
-                    {% if user_form.edu1_direction.errors %}<p>{{ user_form.edu1_direction.errors }}</p>{% endif %}
-                    {% render_field user_form.edu1_direction type="text" class="form-control" placeholder=""%}
+                    {% if profile_form.edu1_direction.errors %}<p>{{ profile_form.edu1_direction.errors }}</p>{% endif %}
+                    {% render_field profile_form.edu1_direction type="text" class="form-control" placeholder=""%}
                 </div>
         
                 <div class="col-sm-6">
                     <label class="form-label">Start date</label>
-                    {% if user_form.edu1_start_date.errors %}<p>{{ user_form.edu1_start_date.errors }}</p>{% endif %}
-                    {% render_field user_form.edu1_start_date type="date" class="form-control" placeholder=""%}
+                    {% if profile_form.edu1_start_date.errors %}<p>{{ profile_form.edu1_start_date.errors }}</p>{% endif %}
+                    {% render_field profile_form.edu1_start_date type="date" class="form-control" placeholder=""%}
                 </div>
 
                 <div class="col-sm-6">
                     <label class="form-label">End date</label>
-                    {% if user_form.edu1_end_date.errors %}<p>{{ user_form.edu1_end_date.errors }}</p>{% endif %}
-                    {% render_field user_form.edu1_end_date type="date" class="form-control" placeholder=""%}
+                    {% if profile_form.edu1_end_date.errors %}<p>{{ profile_form.edu1_end_date.errors }}</p>{% endif %}
+                    {% render_field profile_form.edu1_end_date type="date" class="form-control" placeholder=""%}
                 </div>
                 
                 <div class="col-sm-6">
                     <div class="form-check">
                         <p></p>
-                        <p>{{ user_form.edu1_now.errors }}</p>
-                        {% render_field user_form.edu1_now class="form-check-input" %}
+                        <p>{{ profile_form.edu1_now.errors }}</p>
+                        {% render_field profile_form.edu1_now class="form-check-input" %}
                         {% comment %} <input class="form-check-input" type="checkbox" value="" id="allowChecked" checked> {% endcomment %}
                         <label class="form-check-label" for="allowChecked">
                         Until now
@@ -137,32 +143,32 @@
                 <h1 class="h5 card-title">Education 2</h1>
                 <div class="col-sm-6">
                     <label class="form-label">Name</label>
-                    {% if user_form.edu2_name.errors %}<p>{{ user_form.edu2_name.errors }}</p>{% endif %}
-                    {% render_field user_form.edu2_name type="text" class="form-control" placeholder=""%}
+                    {% if profile_form.edu2_name.errors %}<p>{{ profile_form.edu2_name.errors }}</p>{% endif %}
+                    {% render_field profile_form.edu2_name type="text" class="form-control" placeholder=""%}
                 </div>
 
                 <div class="col-sm-6">
                     <label class="form-label">Direction</label>
-                    {% if user_form.edu2_direction.errors %}<p>{{ user_form.edu2_direction.errors }}</p>{% endif %}
-                    {% render_field user_form.edu2_direction type="text" class="form-control" placeholder=""%}
+                    {% if profile_form.edu2_direction.errors %}<p>{{ profile_form.edu2_direction.errors }}</p>{% endif %}
+                    {% render_field profile_form.edu2_direction type="text" class="form-control" placeholder=""%}
                 </div>
                 <div class="col-sm-6">
                     <label class="form-label">Start date</label>
-                    {% if user_form.edu2_start_date.errors %}<p>{{ user_form.edu2_start_date.errors }}</p>{% endif %}
-                    {% render_field user_form.edu2_start_date type="date" class="form-control" placeholder=""%}
+                    {% if profile_form.edu2_start_date.errors %}<p>{{ profile_form.edu2_start_date.errors }}</p>{% endif %}
+                    {% render_field profile_form.edu2_start_date type="date" class="form-control" placeholder=""%}
                 </div>
 
                 <div class="col-sm-6">
                     <label class="form-label">End date</label>
-                    {% if user_form.edu2_end_date.errors %}<p>{{ user_form.edu2_end_date.errors }}</p>{% endif %}
-                    {% render_field user_form.edu2_end_date type="date" class="form-control" placeholder=""%}
+                    {% if profile_form.edu2_end_date.errors %}<p>{{ profile_form.edu2_end_date.errors }}</p>{% endif %}
+                    {% render_field profile_form.edu2_end_date type="date" class="form-control" placeholder=""%}
                 </div>
                 
                 <div class="col-sm-6">
                     <div class="form-check">
                         <p></p>
-                        <p>{{ user_form.edu2_now.errors }}</p>
-                        {% render_field user_form.edu1_now class="form-check-input" %}
+                        <p>{{ profile_form.edu2_now.errors }}</p>
+                        {% render_field profile_form.edu1_now class="form-check-input" %}
                         {% comment %} <input class="form-check-input" type="checkbox" value="" id="allowChecked" checked> {% endcomment %}
                         <label class="form-check-label" for="allowChecked">
                         Until now

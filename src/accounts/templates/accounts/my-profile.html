@@ -472,11 +472,11 @@
               </div>
               <!-- Card body START -->
               <div class="card-body position-relative pt-0">
-                <p>{{ request.user.about }}.</p>
+                <p>{{ request.user.profile.about }}.</p>
                 <!-- Date time -->
                 <ul class="list-unstyled mt-3 mb-0">
-                  <li class="mb-2"> <i class="bi bi-calendar-date fa-fw pe-1"></i> Born: <strong> {{ request.user.birth_date }} </strong> </li>
-                  <li class="mb-2"> <i class="bi bi-heart fa-fw pe-1"></i> Status: <strong> {{ request.user.get_life_status_display }} </strong> </li>
+                  <li class="mb-2"> <i class="bi bi-calendar-date fa-fw pe-1"></i> Born: <strong> {{ request.user.profile.birth_date }} </strong> </li>
+                  <li class="mb-2"> <i class="bi bi-heart fa-fw pe-1"></i> Status: <strong> {{ request.user.profile.get_life_status_display }} </strong> </li>
                   <li> <i class="bi bi-envelope fa-fw pe-1"></i> Email: <strong> {{ request.user.email }}</strong> </li>
                 </ul>
               </div>
