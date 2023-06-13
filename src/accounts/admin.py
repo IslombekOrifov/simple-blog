@@ -6,7 +6,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 
 
-from .models import CustomUser
+from .models import CustomUser, Profile
 
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin): 
@@ -17,3 +17,7 @@ class CustomUserAdmin(UserAdmin):
         (_("Important dates"), {"fields": ("last_login", "date_joined")}),
         (_("Custom info"), {"fields": ("phone", "avatar")}),
     )
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ['user', 'birth_date', 'life_status', 'about',]

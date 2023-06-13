@@ -1,5 +1,5 @@
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.http import HttpResponse, Http404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, views as auth_views
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
@@ -145,3 +145,14 @@ def my_profile(request):
         'settings_menu_title': "close_account",
     }
     return render(request, 'accounts/my-profile.html', context)
+
+
+@login_required
+def user_profile(request, custom_id):
+    user = CustomUser.objects.filter(custom_id=custom_id).select_related('profile').first()
+    if not user:
+        raise Http404("Sorry. this user didn't match")
+    context = {
+        'user': user,
+    }
+    return render(request, 'accounts/profile.html', context)

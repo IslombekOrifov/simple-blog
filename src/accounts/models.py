@@ -17,7 +17,8 @@ class CustomUser(AbstractUser):
         error_messages={
             "unique": _("A product with that custom_id already exists."),
         },
-    )   # add unique=True,
+        unique=True,
+    )
     email = models.EmailField(blank=True)
     phone = models.CharField(
         max_length=13, 
@@ -28,7 +29,7 @@ class CustomUser(AbstractUser):
     REQUIRED_FIELDS = []
 
     first_login = models.DateField(null=True)
-    middle_name = models.CharField(max_length=50)
+    middle_name = models.CharField(max_length=50, blank=True)
     avatar = models.ImageField(
         upload_to=upload_avatar_path, 
         validators=[validate_image], 
@@ -57,7 +58,7 @@ class CustomUser(AbstractUser):
         self.email = ' '.join(self.email.strip().split())
         self.phone = ' '.join(self.phone.strip().split())
         if self.custom_id == '':
-            self.custom_id == str(uuid4())[-12:]
+            self.custom_id = str(uuid4())[-12:]
         super().save(*args, **kwargs)
 
 
@@ -81,7 +82,7 @@ class Profile(models.Model):
     """ User's profile datas """
 
     class LifeStatus(models.TextChoices):
-        SINGLE = 's', 'single'
+        SINGLE = 's', 'Single'
         RELATIONSHIP = 'ir', 'In relationship'
 
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='profile')
