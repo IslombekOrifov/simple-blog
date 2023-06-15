@@ -59,10 +59,6 @@ class CustomPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
 
 
 
-@login_required
-def index(request):
-    return render(request, 'accounts/index.html')
-
 
 @login_required
 def settings_account(request):

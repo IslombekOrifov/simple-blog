@@ -15,7 +15,7 @@ class CustomUser(AbstractUser):
         max_length=12,
         db_index=True,
         error_messages={
-            "unique": _("A product with that custom_id already exists."),
+            "unique": _("A user with that custom_id already exists."),
         },
         unique=True,
     )
