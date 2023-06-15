@@ -162,14 +162,25 @@
 
                 <!-- Share feed START -->
                 <div class="card card-body">
+                    {% if messages %}
+                            {% for message in messages%}
+                                {% if 'post' in message.tags %}
+                                    {% if 'error' in message.tags %}
+                                        <p> {{ message }}</p>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
                     <div class="d-flex mb-3">
                         <!-- Avatar -->
                         <div class="avatar avatar-xs me-2">
-                            <a href="#"> <img class="avatar-img rounded-circle" src="assets/images/avatar/03.jpg" alt=""> </a>
+                            <a href="#"> <img class="avatar-img rounded-circle" src="{% if request.user.avatar %}{{ request.user.avatar.url }}{% endif %}" alt=""> </a>
                         </div>
                         <!-- Post input -->
-                        <form class="w-100">
-                            <textarea class="form-control pe-4 border-0" rows="2" data-autoresize placeholder="Share your thoughts..."></textarea>
+                        <form class="w-100" method='post' enctype="multipart/form-data" action="{% url 'posts:create' %}">
+                            {% csrf_token %}
+                            <textarea class="form-control pe-4 border-0" name='body' rows="2" data-autoresize placeholder="Share your thoughts..."></textarea>
+                            <button class="nav-item w-100 border-0 nav-link bg-light py-1 px-2 mb-0" type='submit'>Post</button>
                         </form>
                     </div>
                     <!-- Share feed toolbar START -->
@@ -2325,7 +2336,7 @@
                     <div class="d-flex mb-3">
                         <!-- Avatar -->
                         <div class="avatar avatar-xs me-2">
-                            <img class="avatar-img rounded-circle" src="assets/images/avatar/03.jpg" alt="">
+                            <img class="avatar-img rounded-circle" src="{%if request.user.avatar %}{{ request.user.avatar.url }}{% endif %}" alt="">
                         </div>
                         <!-- Feed box  -->
                         <form class="w-100">
@@ -2383,29 +2394,36 @@
                     <!-- Modal feed body START -->
                     <div class="modal-body">
                     <!-- Add Feed -->
+                    <form class="w-100" id='image-upload-form' method='post' enctype="multipart/form-data" action="{% url 'posts:create' %}">
+                        {% csrf_token %}
                     <div class="d-flex mb-3">
                         <!-- Avatar -->
                         <div class="avatar avatar-xs me-2">
-                            <img class="avatar-img rounded-circle" src="assets/images/avatar/03.jpg" alt="">
+                            <img class="avatar-img rounded-circle" src="{%if request.user.avatar %}{{ request.user.avatar.url }}{% endif %}" alt="">
                         </div>
                         <!-- Feed box  -->
-                        <form class="w-100">
-                            <textarea class="form-control pe-4 fs-3 lh-1 border-0" rows="2" placeholder="Share your thoughts..."></textarea>
-                        </form>
+                            <textarea class="form-control pe-4 fs-3 lh-1 border-0" name='body' rows="2" placeholder="Share your thoughts..."></textarea>
                     </div>
 
                     <!-- Dropzone photo START -->
                     <div>
-                        <label class="form-label">Upload attachment</label>
-                        <div class="dropzone dropzone-default card shadow-none" data-dropzone='{"maxFiles":2}'>
-                            <div class="dz-message">
-                                <i class="bi bi-images display-3"></i>
-                                <p>Drag here or click to upload photo.</p>
+                        <div class="customcontainer">
+                            <label class="customlabel" for="input">Please upload a picture !</label>
+                        
+                            <div class="custominput">
+                                <input name="input" name="image" id="customfile" type="file">
                             </div>
                         </div>
+
+                        {% comment %} <label class="form-label">Upload attachment</label>
+                        <div class="dropzone .dropzone-custom card shadow-none" data-dropzone='{"maxFiles":2}'>
+                            <div class="dz-message">
+
+                                
+                            </div>
+                        </div> {% endcomment %}
                     </div>
                     <!-- Dropzone photo END -->
-
                     </div>
                     <!-- Modal feed body END -->
 
@@ -2413,8 +2431,9 @@
                     <div class="modal-footer ">
                         <!-- Button -->
                             <button type="button" class="btn btn-danger-soft me-2" data-bs-dismiss="modal">Cancel</button>
-                            <button type="button" class="btn btn-success-soft">Post</button>
+                            <button type="submit" class="btn btn-success-soft">Post</button>
                     </div>
+                    </form>
                     <!-- Modal feed footer -->
             </div>
         </div>

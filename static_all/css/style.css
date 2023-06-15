@@ -17621,3 +17621,57 @@ a.badge:hover {
 
 /*User CSS*/
 /*# sourceMappingURL=style.css.map */
+
+.customcontainer{
+	width: 100%;
+	margin: 50px auto;
+	font-family: sans-serif;
+}
+
+.customlabel{
+	display: block;
+	max-width: 200px;
+    margin: 0 auto 15px;
+	text-align: center;
+    word-wrap: break-word;
+	color: #1a4756;
+}
+
+.hidden{
+	display: none !important;
+}
+
+.hidden, #uploadImg:not(.hidden) + .customlabel{
+	display: none !important;
+}
+
+#customfile{
+	display: none;
+  margin: 0 auto;
+}
+
+#customupload{
+	display: block;
+	padding: 10px 25px;
+	border: 0;
+	margin: 0 auto;
+	font-size: 15px;
+	letter-spacing: 0.05em;
+	cursor: pointer;
+	background: #216e69;
+	color: #fff;
+	outline: none;
+	transition: .3s ease-in-out;
+	&:hover, &:focus{
+		background: #1AA39A;
+	}
+	&:active{
+		background: #13D4C8;
+		transition: .1s ease-in-out;
+	}
+}
+
+#uploadImg{
+	display: block;
+	margin: 0 auto 15px;
+}

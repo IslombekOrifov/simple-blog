@@ -2179,6 +2179,7 @@ JS libraries, plugins and custom scripts -->
 
 <!-- Bootstrap JS -->
 {% block script %}
+    <script src="{% static 'vendor/jquery/jquery-3.7.0.min.js' %}"></script>
     <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
 
     <!-- Vendors -->
@@ -2195,6 +2196,7 @@ JS libraries, plugins and custom scripts -->
 
     <!-- Theme Functions -->
     <script src="{% static 'js/functions.js' %}"></script>
+    <script src="{% static 'js/imagedisplay.js' %}"></script>
 
 
 </body>

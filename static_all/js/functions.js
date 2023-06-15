@@ -29,6 +29,8 @@ Table Of Content
 18 FAKE PASSWORD
 ====================== */
 
+
+
 "use strict";
 !function () {
 
@@ -65,6 +67,7 @@ Table Of Content
 		}, window.Element.prototype.isVariableDefined = function () {
 				return !!this && typeof (this) != 'undefined' && this != null;
 		}
+		
 }();
 
 
@@ -480,69 +483,8 @@ var e = {
 
 	// START: 12 Drop Zone
 	DropZone: function () {
-		if (e.isVariableDefined(e.select("[data-dropzone]"))) {
-			window.Dropzone.autoDiscover = false;
-
-			// 1. Default Dropzone Initialization
-			if (e.isVariableDefined(e.select(".dropzone-default"))) {
-				e.selectAll(".dropzone-default").forEach((e => {
-					const a = e.dataset.dropzone ? JSON.parse(e.dataset.dropzone) : {},
-						b = {
-							url: '/upload', // Change this URL to your actual image upload code
-							// Fake the file upload, since GitHub does not handle file uploads
-							// and returns a 404
-							// https://docs.dropzone.dev/getting-started/setup/server-side-implementation
-							init: function() {
-								this.on('error', function(file, errorMessage) {
-									if (file.accepted) {
-										var mypreview = document.getElementsByClassName('dz-error');
-										mypreview = mypreview[mypreview.length - 1];
-										mypreview.classList.toggle('dz-error');
-										mypreview.classList.toggle('dz-success');
-									}
-								});
-							}
-						},
-						c = {
-							...b,
-							...a
-						};
-						new Dropzone(e, c);
-					}));
-			}
-	
-			// 2. Custom cover and list previews Dropzone Initialization
-			if (e.isVariableDefined(e.select(".dropzone-custom"))) {
-				e.selectAll(".dropzone-custom").forEach((d => {
-					const j = d.dataset.dropzone ? JSON.parse(d.dataset.dropzone) : {},
-						o = {
-							addRemoveLinks: true,
-							previewsContainer: d.querySelector(".dz-preview"),
-							previewTemplate: d.querySelector(".dz-preview").innerHTML,
-							url: '/upload', // Change this URL to your actual image upload code
-							// Now fake the file upload, since GitHub does not handle file uploads
-							// and returns a 404
-							// https://docs.dropzone.dev/getting-started/setup/server-side-implementation
-							init: function() {
-								this.on('error', function(file, errorMessage) {
-									if (file.accepted) {
-										var mypreview = document.getElementsByClassName('dz-error');
-										mypreview = mypreview[mypreview.length - 1];
-										mypreview.classList.toggle('dz-error');
-										mypreview.classList.toggle('dz-success');
-									}
-								});
-							}
-						},
-						x = {
-							...o,
-							...j
-						};
-						d.querySelector(".dz-preview").innerHTML = '';
-						new Dropzone(d, x);
-				}));
-			}
-		}
+		
+		
 	},
 	// END: Drop Zone
 
@@ -703,6 +645,11 @@ var e = {
 		}
 	}
   // END: Fake Password
+
+  
  
 };
+
 e.init();
+
+

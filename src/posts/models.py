@@ -24,32 +24,35 @@ class Post(models.Model):
                              )
     video = models.URLField(max_length=500, blank=True, null=True)
 
-    slug = models.SlugField(max_length=50, unique_for_date='publish')
-    body = models.CharField(max_length=300, blank=True, null=True)
+    slug = models.SlugField(max_length=50, unique=True)
+    text = models.CharField(max_length=300, blank=True, null=True)
    
-    publish = models.DateTimeField(default=timezone.now)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     
     status = models.CharField(max_length=3, choices=PostStatus.choices, default=PostStatus.ACTIVE)
     is_deleted = models.BooleanField(default=False)
 
+    views_count = models.PositiveIntegerField(default=0, blank=True)
+
+    users_like = models.ManyToManyField(CustomUser, related_name='images_liked', blank=True)
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='posts')
 
 
     class Meta:
         ordering = ('-date_created',)
-        unique_together = ('image', 'body', 'date_created', 'publish')
+        unique_together = ('image', 'text', 'date_created',)
+        indexes = [
+            models.Index(fields=['-date_created', 'slug', 'status']),
+        ]
 
-    def __str__(self):
-        return self.title
-    
+
     def save(self, *args, **kwargs):
-        if self.body != '':
-            self.body = ' '.join(self.title.strip().split())
+        if self.text != '':
+            self.text = ' '.join(self.text.strip().split())
         if not self.slug:
             self.slug == slugify(uuid4())
-        if self.body == '' and not self.image and not self.video:
+        if self.text == '' and not self.image and not self.video:
             raise ValidationError("image, video yoki text to'ldirilishi kerak")
         super().save(self, *args, **kwargs)
 
