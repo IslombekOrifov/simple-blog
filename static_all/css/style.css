@@ -17645,7 +17645,7 @@ a.badge:hover {
 	display: none !important;
 }
 
-#customfile{
+.customfile{
 	display: none;
   margin: 0 auto;
 }
@@ -17675,3 +17675,5 @@ a.badge:hover {
 	display: block;
 	margin: 0 auto 15px;
 }
+
+

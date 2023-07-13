@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .truncate {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2; /* You can change this value to set the number of lines to show initially */
+      -webkit-box-orient: vertical;
+    }
+  </style>
+</head>
+<body>
+  <p class="truncate">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris non facilisis ligula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris non facilisis ligula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris non facilisis ligula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris non facilisis ligula. </p>
+  <p class="truncate">Integer eleifend augue vel nisi tristique blandit. Aliquam pellentesque cursus ante vitae pulvinar. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris non facilisis ligula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris non facilisis ligula. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var paragraphs = document.getElementsByTagName('p');
+
+      for (var i = 0; i < paragraphs.length; i++) {
+        var paragraph = paragraphs[i];
+        paragraph.dataset.fulltext = paragraph.textContent;
+        var originalText = paragraph.textContent;
+  
+        if (originalText.split(' ').length > 5) {
+          paragraph.classList.add('truncate');
+          paragraph.textContent = originalText.split(' ').slice(0, 5).join()
+  
+          var readMoreBtn = document.createElement('button');
+          readMoreBtn.textContent = 'Read More';
+          readMoreBtn.classList = 'mybtn'
+          paragraph.appendChild(readMoreBtn);
+        }
+      }
+      document.on('click', '.mybtn', function(){
+            alert( 'ishladi' );
+        });
+        // Get the parent element of the button
+        // var parentElement = button.parentElement;
+        // alert(parentElement.innerText)
+        // parentElement.innerText = parentElement.dataset.fulltext
+        // // Get the text of the parent element
+        // alert(parentElement.innerText)
+        // var parentText = parentElement.innerText;
+
+
+    });
+  </script>
+</body>
+</html>
+
+<!-- $('.class_link_show_more').click(function () {
+    var the_parent = $(this).parent();
+     the_parent.children('.class_full_text').hide();  // hide fullText p
+     the_parent.children('.class_link_show_more').hide(); //hide button
+     the_parent.children('.class_link_hide').show('100');  // Show HideText p
+     the_parent.children('.class_hide_text').show('100');  // Show HideText p
+ 
+  });
+ $('.class_link_hide').click(function () {
+    var the_parent = $(this).parent();
+     the_parent.children('.class_link_hide').hide();  // hide link hide
+     the_parent.children('.class_hide_text').hide();  // hide hide text p
+     the_parent.children('.class_link_show_more').show('100'); //Show link show
+     the_parent.children('.class_full_text').show('100;);  // show full text
+  }); -->

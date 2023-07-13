@@ -44,14 +44,6 @@ class CustomUser(AbstractUser):
             return f"{self.get_full_name()}"
         return f'{self.email} > {self.username}'
     
-    def get_full_name(self):
-        """
-        Return the first_name plus the last_name, with a space in between.
-        """
-        full_name = "%s %s" % (self.first_name, self.last_name)
-        if full_name == ' ':
-            return self.username
-        return full_name.strip()
 
     def save(self, *args, **kwargs):
         self.username = ' '.join(self.username.strip().split())

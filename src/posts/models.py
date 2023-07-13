@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.urls import reverse
 from django.core.validators import MinLengthValidator
 from django.core.exceptions import ValidationError
 from django.utils.text import slugify
@@ -7,7 +8,7 @@ from uuid import uuid4
 
 from accounts.models import CustomUser
 from accounts.validators import validate_image
-from .services import upload_image_path
+from .services import upload_image_path, upload_video_path
 
 
 class Post(models.Model):
@@ -22,7 +23,7 @@ class Post(models.Model):
                               validators=[validate_image], 
                               blank=True, null=True
                              )
-    video = models.URLField(max_length=500, blank=True, null=True)
+    video = models.FileField(upload_to=upload_video_path, blank=True, null=True)
 
     slug = models.SlugField(max_length=50, unique=True)
     text = models.CharField(max_length=300, blank=True, null=True)
@@ -56,6 +57,8 @@ class Post(models.Model):
             raise ValidationError("image, video yoki text to'ldirilishi kerak")
         super().save(self, *args, **kwargs)
 
+    def get_absolute_url(self):
+        return reverse("posts:detail", args=[self.id, self.slug])
    
 
 class Comment(models.Model):

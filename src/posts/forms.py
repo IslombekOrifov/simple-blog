@@ -11,7 +11,7 @@ class PostCreateForm(forms.ModelForm):
         fields = ['image', 'video', 'text']
 
     def clean_image(self):
-        if self.cleaned_data['image'] and self.cleaned_data['video']:
+        if self.cleaned_data.get('image', False) and self.cleaned_data.get('video', False):
             return forms.ValidationError("You can upload only one of image or video.")
         return self.cleaned_data['image']
 
