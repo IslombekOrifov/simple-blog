@@ -49,14 +49,20 @@ class Post(models.Model):
 
 
     def save(self, *args, **kwargs):
-        if self.text != '':
+        # Clean the text field by removing extra spaces
+        if self.text:
             self.text = ' '.join(self.text.strip().split())
-        if not self.slug:
-            self.slug == slugify(uuid4())
-        if self.text == '' and not self.image and not self.video:
-            raise ValidationError("image, video yoki text to'ldirilishi kerak")
-        super().save(self, *args, **kwargs)
 
+        # Generate a unique slug using UUID if it's not provided
+        if not self.slug:
+            self.slug = slugify(uuid4())
+
+        # Check if either text, image, or video is provided
+        if not self.text and not self.image and not self.video:
+            raise ValidationError("Image, video, or text must be provided.")
+        
+        # Call the original save method with the modified data
+        super().save(*args, **kwargs)
     def get_absolute_url(self):
         return reverse("posts:detail", args=[self.id, self.slug])
    

@@ -2197,7 +2197,8 @@ JS libraries, plugins and custom scripts -->
     <!-- Theme Functions -->
     <script src="{% static 'js/functions.js' %}"></script>
     <script src="{% static 'js/imagedisplay.js' %}"></script>
-    <script src="//cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+    {% comment %} <script src="//cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script> {% endcomment %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"></script>
     <script>
         const csrftoken = Cookies.get('csrftoken');
         document.addEventListener('DOMContentLoaded', (event)=> {

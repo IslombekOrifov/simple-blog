@@ -17677,3 +17677,9 @@ a.badge:hover {
 }
 
 
+a.more-btn,
+a.less-btn {
+  color: blue; /* Change the color to your desired color for the links */
+  text-decoration: underline;
+  cursor: pointer;
+}

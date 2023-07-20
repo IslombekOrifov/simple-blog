@@ -152,3 +152,19 @@ def user_profile(request, custom_id):
         'user': user,
     }
     return render(request, 'accounts/profile.html', context)
+
+
+@login_required
+def followers_list(request, username):
+    user = CustomUser.objects.filter(username=username).select_related('profile').prefetch_related('followers').first()
+    if not user:
+        raise Http404
+    return render(request, 'accounts/followers.html', {'user': user})
+
+
+@login_required
+def user_detail(request, username):
+    user = CustomUser.objects.filter(username=username, is_deleted=False, is_active=True).select_related('profile').first()
+    if not user:
+        raise Http404
+    return render(request, 'accounts/profile.html', {'user': user})

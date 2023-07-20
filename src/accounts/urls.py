@@ -17,8 +17,10 @@ urlpatterns = [
     path('settings/close/account/', views.settings_close_account, name='settings_close_account'),
     # end settings urls
 
+    # path('my/followers/', views.followers_list, name='my_followers'),
     path('my/', views.my_profile, name='my_profile'),
-    path('user/profile/<custom_id>/', views.user_profile, name='user_profile'),
+    path('users/profile/<username>/', views.user_detail, name='user_profile'),
+    path('users/followers/<username>/', views.followers_list, name='user_followers'),
 
     # register login logout
     path('register/', views.register, name='register'),

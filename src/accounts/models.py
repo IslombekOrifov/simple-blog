@@ -36,6 +36,13 @@ class CustomUser(AbstractUser):
         blank=True, null=True
     )
     
+    following = models.ManyToManyField(
+        'self',
+        through='Contact',
+        related_name='followers',
+        symmetrical=False
+    )
+
     is_deleted = models.BooleanField(default=False)
 
 
@@ -43,7 +50,6 @@ class CustomUser(AbstractUser):
         if self.get_full_name():
             return f"{self.get_full_name()}"
         return f'{self.email} > {self.username}'
-    
 
     def save(self, *args, **kwargs):
         self.username = ' '.join(self.username.strip().split())
@@ -99,3 +105,23 @@ class Profile(models.Model):
     edu2_start_date = models.DateField(blank=True, null=True)
     edu2_end_date = models.DateField(blank=True, null=True)
     edu2_now = models.BooleanField(default=False)
+
+
+
+
+
+class Contact(models.Model):
+    user_from = models.ForeignKey(CustomUser, related_name="rel_from_set", on_delete=models.CASCADE)
+
+    user_to = models.ForeignKey(CustomUser, related_name="rel_to_set", on_delete=models.CASCADE)
+
+    date_created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['-date_created']),
+        ]
+        ordering = ['-date_created']
+
+    def __str__(self):
+        return f"{self.user_from} follows {self.user_to}"

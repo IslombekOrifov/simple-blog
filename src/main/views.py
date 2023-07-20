@@ -25,7 +25,7 @@ def index(request):
         posts = paginator.page(paginator.num_pages)
     
     if posts_only:
-        return render(request, 'main/list_post.html', {'posts': posts})
+        return render(request, 'main/list_posts.html', {'posts': posts})
 
     context = {
         'post_form': post_form,
