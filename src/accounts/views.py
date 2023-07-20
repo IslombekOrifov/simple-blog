@@ -1,18 +1,18 @@
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, views as auth_views
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from django.urls import reverse_lazy
 from django.contrib.auth import views as auth_views
-from django.views.generic import UpdateView
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-
-from .models import Experience, CustomUser, Profile
+from .models import Experience, CustomUser, Profile, Contact
 from .forms import (
     LoginForm, UserRegisterForm, CustomUserEdit,
     ProfileEdit, UserExperienceForm,
 )
-
+from posts.models import Post
 
 def register(request):
     if request.method == 'POST':
@@ -164,7 +164,48 @@ def followers_list(request, username):
 
 @login_required
 def user_detail(request, username):
-    user = CustomUser.objects.filter(username=username, is_deleted=False, is_active=True).select_related('profile').first()
+    user = CustomUser.objects.filter(username=username, is_deleted=False, is_active=True).select_related('profile').prefetch_related('posts').first()
     if not user:
         raise Http404
-    return render(request, 'accounts/profile.html', {'user': user})
+    
+    posts = user.posts.all()
+
+    paginator = Paginator(posts, 1)
+    page = request.GET.get('page')
+    posts_only = request.GET.get('posts_only')
+
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        if posts_only:
+            return HttpResponse('')
+        posts = paginator.page(paginator.num_pages)
+    
+    if posts_only:
+        return render(request, 'main/list_posts.html', {'posts': posts})
+
+    context = {
+        'user': user,
+        'posts': posts,
+    }
+    return render(request, 'accounts/profile.html', context)
+
+
+@login_required
+@require_POST
+def user_follow(request):
+    username = request.POST.get('id')
+    action = request.POST.get('action')
+    if username and action:
+        try:
+            user = CustomUser.objects.get(username=username)
+            if action == 'follow':
+                Contact.objects.get_or_create(user_from=request.user, user_to=user)
+            else:
+                Contact.objects.filter(user_from=request.user, user_to=user).delete()
+            return JsonResponse({'status': 'ok'})
+        except CustomUser.DoesNotExist:
+            return JsonResponse({'status':'error'})
+    return JsonResponse({'status': 'error'})

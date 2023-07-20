@@ -21,6 +21,7 @@ urlpatterns = [
     path('my/', views.my_profile, name='my_profile'),
     path('users/profile/<username>/', views.user_detail, name='user_profile'),
     path('users/followers/<username>/', views.followers_list, name='user_followers'),
+    path('users/follow/', views.user_follow, name='user_follow'),
 
     # register login logout
     path('register/', views.register, name='register'),

@@ -42,7 +42,6 @@ class CustomUser(AbstractUser):
         related_name='followers',
         symmetrical=False
     )
-
     is_deleted = models.BooleanField(default=False)
 
 
