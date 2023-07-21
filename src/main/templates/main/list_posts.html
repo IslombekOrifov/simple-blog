@@ -2,7 +2,7 @@
 {% for post in posts %}
     {% with total_likes=post.users_like.count users_like=post.users_like.all %}
         <!-- Card feed item START -->
-        <div class="card">
+        <div class="card posts">
             <!-- Card header START -->
             <div class="card-header border-0 pb-0">
                 <div class="d-flex align-items-center justify-content-between">
@@ -20,15 +20,18 @@
                             <p class="mb-0 small">Web Developer at Webestica</p>
                         </div>
                     </div>
-                    {% if post.author not in request.user.followers.all %}
-                        <div class="d-flex align-items-center">
-                            <!-- Avatar -->
-                            <div class="avatar avatar-story me-2">
-                                <a href="#!"> <img class="avatar-img rounded-circle" src="{% if post.author.avatar %}{{ post.author.avatar.url }}{% else %}{% static 'images/avatar/account_default.png' %}{% endif %}" alt=""> </a>
-                            </div>
-                            <!-- Info -->
-                        </div>
-                    {% endif %}
+                    
+                    <div class="d-flex align-items-center">
+                        <!-- Avatar -->
+                        {% if request.user != post.author and not request.user in post.author.followers.all %}
+                            <a class="btn btn-danger-soft me-2 follow" data-id="{{ post.author.username }}" data-action="follow">follow</a>
+                        <!-- Info -->
+                        {% else %}
+                            <a class="btn btn-danger-soft me-2 follow" style="display: none;" data-id="{{ post.author.username }}" data-action="follow">follow</a>
+                        {% endif %}
+                    </div>
+                    
+            
                     <!-- Card feed action dropdown START -->
                     <div class="dropdown">
                         <a href="#" class="text-secondary btn btn-secondary-soft-hover py-1 px-2" id="cardFeedAction" data-bs-toggle="dropdown" aria-expanded="false">
@@ -37,8 +40,14 @@
                         <!-- Card feed action dropdown menu -->
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardFeedAction">
                             <li><a class="dropdown-item" href="#"> <i class="bi bi-bookmark fa-fw pe-2"></i>Save post</a></li>
-                            <li><a class="dropdown-item" href="#"> <i class="bi bi-person-x fa-fw pe-2"></i>Unfollow lori ferguson </a></li>
-                            <li><a class="dropdown-item" href="#"> <i class="bi bi-x-circle fa-fw pe-2"></i>Hide post</a></li>
+                            {% if not selected_user %}
+                                {% if request.user != post.author and request.user in post.author.followers.all %}
+                                    <li><a class="dropdown-item unfollow" data-id="{{ post.author.username }}" data-action="unfollow"> <i class="bi bi-person-x fa-fw pe-2"></i>Unfollow {{ post.author.username }} </a></li>
+                                {% else %}
+                                    <li><a class="dropdown-item unfollow" style="display: none;" data-id="{{ post.author.username }}" data-action="unfollow"> <i class="bi bi-person-x fa-fw pe-2"></i>Unfollow {{ post.author.username }} </a></li>
+                                {% endif %}
+                                <li><a class="dropdown-item" href="#"> <i class="bi bi-x-circle fa-fw pe-2"></i>Hide post</a></li>
+                            {% endif %}
                             <li><a class="dropdown-item" href="#"> <i class="bi bi-slash-circle fa-fw pe-2"></i>Block</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="#"> <i class="bi bi-flag fa-fw pe-2"></i>Report post</a></li>
@@ -303,3 +312,4 @@
     });
       
 </script>
+

@@ -164,11 +164,11 @@ def followers_list(request, username):
 
 @login_required
 def user_detail(request, username):
-    user = CustomUser.objects.filter(username=username, is_deleted=False, is_active=True).select_related('profile').prefetch_related('posts').first()
+    selected_user = CustomUser.objects.filter(username=username, is_deleted=False, is_active=True).select_related('profile').prefetch_related('posts', 'followers').first()
     if not user:
         raise Http404
     
-    posts = user.posts.all()
+    posts = selected_user.posts.all()
 
     paginator = Paginator(posts, 1)
     page = request.GET.get('page')
@@ -184,10 +184,10 @@ def user_detail(request, username):
         posts = paginator.page(paginator.num_pages)
     
     if posts_only:
-        return render(request, 'main/list_posts.html', {'posts': posts})
+        return render(request, 'main/list_posts.html', {'posts': posts, 'user': user,})
 
     context = {
-        'user': user,
+        'selected_user': selected_user,
         'posts': posts,
     }
     return render(request, 'accounts/profile.html', context)
@@ -197,6 +197,7 @@ def user_detail(request, username):
 @require_POST
 def user_follow(request):
     username = request.POST.get('id')
+    print(username)
     action = request.POST.get('action')
     if username and action:
         try:

@@ -38,17 +38,17 @@
               <div>
                 <!-- Avatar -->
                 <div class="avatar avatar-xxl mt-n5 mb-3">
-                  <img class="avatar-img rounded-circle border border-white border-3" src="{% if user.avatar %}{{ user.avatar.url}}{% else %}{% static 'images/avatar/account_default.png' %}{% endif %}" alt="">
+                  <img class="avatar-img rounded-circle border border-white border-3" src="{% if selected_user.avatar %}{{ selected_user.avatar.url}}{% else %}{% static 'images/avatar/account_default.png' %}{% endif %}" alt="">
                 </div>
               </div>
               <div class="ms-sm-4 mt-sm-3">
                 <!-- Info -->
-                <h1 class="mb-0 h5">{{ user.username }} <i class="bi bi-patch-check-fill text-success small"></i></h1>
-                <p>{{ user.followers.count }} connections</p>
+                <h1 class="mb-0 h5">{{ selected_user.username }} <i class="bi bi-patch-check-fill text-success small"></i></h1>
+                <p class="folowers-count">{{ selected_user.followers.count }} connections</p>
               </div>
               <!-- Button -->
               <div class="d-flex mt-3 justify-content-center ms-sm-auto">
-                <a class="btn btn-danger-soft me-2 follow" data-id="{{ user.username }}" data-action="{% if user in request.user.followers.all %}un{% endif %}follow"> {% if user in request.user.followers.all %}unfollow{% else %}<i class="bi bi-plus pe-1"></i>follow{% endif %}</a>
+                <a class="btn btn-danger-soft me-2 follow" data-id="{{ selected_user.username }}" data-action="{% if user in request.selected_user.followers.all %}un{% endif %}follow"> {% if selected_user in request.user.followers.all %}unfollow{% else %}<i class="bi bi-plus pe-1"></i>follow{% endif %}</a>
                 <div class="dropdown">
                   <!-- Card share action menu -->
                   <button class="icon-md btn btn-light" type="button" id="profileAction2" data-bs-toggle="dropdown" aria-expanded="false">
@@ -66,7 +66,7 @@
             <ul class="list-inline mb-0 text-center text-sm-start mt-3 mt-sm-0">
               <li class="list-inline-item"><i class="bi bi-briefcase me-1"></i> Lead Developer</li>
               <li class="list-inline-item"><i class="bi bi-geo-alt me-1"></i> New Hampshire</li>
-              <li class="list-inline-item"><i class="bi bi-calendar2-plus me-1"></i> Joined on {{ user.date_joined|date }}</li>
+              <li class="list-inline-item"><i class="bi bi-calendar2-plus me-1"></i> Joined on {{ selected_user.date_joined|date }}</li>
             </ul>
           </div>
           <!-- Card body END -->

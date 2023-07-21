@@ -2363,15 +2363,15 @@
 
 {% block domready %}
     const url = '{% url "posts:like" %}'
+    const urlfollow = '{% url "accounts:user_follow" %}'
     var options = {
         method: 'POST',
         headers: {'X-CSRFToken': csrftoken},
         mode: 'same-origin'
     }
 
-    // Assuming you have a NodeList of elements with the class "like"
+    // like
     const likeElements = document.querySelectorAll("a.like");
-
     likeElements.forEach(function (likeButton) {
         likeButton.addEventListener("click", function (e) {
             e.preventDefault();
@@ -2405,6 +2405,56 @@
         });
     });
 
+
+  
+    // follow unfollow
+    function toggleFollowButtons(clickedButtonDataId, isFollowed) {
+    const allFollowButtons = document.querySelectorAll(`a.follow[data-id="${clickedButtonDataId}"]`);
+    allFollowButtons.forEach((button) => {
+        button.style.display = isFollowed ? "none" : "block";
+    });
+
+    const allUnFollowButtons = document.querySelectorAll(`a.unfollow[data-id="${clickedButtonDataId}"]`);
+    allUnFollowButtons.forEach((button) => {
+        button.style.display = isFollowed ? "block" : "none";
+    });
+    }
+
+    function handleFollowUnfollowButtonClick(button) {
+    const clickedButtonDataId = button.dataset.id;
+    const isFollowed = button.classList.contains('follow'); // Check if it's a 'follow' button
+
+    var formData = new FormData();
+    formData.append("id", clickedButtonDataId);
+    formData.append("action", button.dataset.action);
+
+    options.body = formData;
+
+    fetch(urlfollow, options)
+        .then((response) => response.json())
+        .then((data) => {
+        if (data["status"] === "ok") {
+            toggleFollowButtons(clickedButtonDataId, isFollowed);
+        }
+        })
+        .catch((error) => {
+        console.error("Error:", error);
+        });
+    }
+
+    document.addEventListener('click', function (e) {
+    if (e.target.matches('.follow') || e.target.matches('.unfollow')) {
+        e.preventDefault();
+        handleFollowUnfollowButtonClick(e.target);
+    }
+    });
+
+  
+
+
+
+
+    // ajax pagination
     var page = 1;
     var emptyPage = false;
     var blockRequest = false;
