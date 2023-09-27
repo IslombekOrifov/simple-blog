@@ -37,6 +37,7 @@ INSTALLED_APPS = [
 
     'main.apps.MainConfig',
     'posts.apps.PostsConfig',
+    'actions.apps.ActionsConfig',
 
     'social_django',
     "sslserver",

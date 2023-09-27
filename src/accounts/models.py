@@ -42,6 +42,7 @@ class CustomUser(AbstractUser):
         related_name='followers',
         symmetrical=False
     )
+
     is_deleted = models.BooleanField(default=False)
 
 
@@ -104,8 +105,6 @@ class Profile(models.Model):
     edu2_start_date = models.DateField(blank=True, null=True)
     edu2_end_date = models.DateField(blank=True, null=True)
     edu2_now = models.BooleanField(default=False)
-
-
 
 
 

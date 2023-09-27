@@ -12,7 +12,6 @@ from .services import upload_image_path, upload_video_path
 
 
 class Post(models.Model):
-
     class PostStatus(models.TextChoices):
         ACTIVE = 'ac', 'Active'
         NOTACTIVE = 'na', 'Not Active'
@@ -24,10 +23,10 @@ class Post(models.Model):
                               blank=True, null=True
                              )
     video = models.FileField(upload_to=upload_video_path, blank=True, null=True)
-
+    
     slug = models.SlugField(max_length=50, unique=True)
     text = models.CharField(max_length=300, blank=True, null=True)
-   
+    
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     
@@ -63,6 +62,7 @@ class Post(models.Model):
         
         # Call the original save method with the modified data
         super().save(*args, **kwargs)
+        
     def get_absolute_url(self):
         return reverse("posts:detail", args=[self.id, self.slug])
    

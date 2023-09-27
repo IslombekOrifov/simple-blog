@@ -13,6 +13,8 @@ from .forms import (
     ProfileEdit, UserExperienceForm,
 )
 from posts.models import Post
+from actions.utils import create_action
+
 
 def register(request):
     if request.method == 'POST':
@@ -56,7 +58,6 @@ class CustomPasswordResetView(auth_views.PasswordResetView):
 
 class CustomPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
     success_url = reverse_lazy("accounts:password_reset_complete")
-
 
 
 
@@ -164,11 +165,11 @@ def followers_list(request, username):
 
 @login_required
 def user_detail(request, username):
-    selected_user = CustomUser.objects.filter(username=username, is_deleted=False, is_active=True).select_related('profile').prefetch_related('posts', 'followers').first()
+    user = CustomUser.objects.filter(username=username, is_deleted=False, is_active=True).select_related('profile').prefetch_related('posts', 'followers').first()
     if not user:
         raise Http404
     
-    posts = selected_user.posts.all()
+    posts = user.posts.all()
 
     paginator = Paginator(posts, 1)
     page = request.GET.get('page')
@@ -187,26 +188,46 @@ def user_detail(request, username):
         return render(request, 'main/list_posts.html', {'posts': posts, 'user': user,})
 
     context = {
-        'selected_user': selected_user,
+        'selected_user': user,
         'posts': posts,
     }
     return render(request, 'accounts/profile.html', context)
 
 
-@login_required
 @require_POST
+@login_required
 def user_follow(request):
     username = request.POST.get('id')
-    print(username)
+
     action = request.POST.get('action')
     if username and action:
         try:
             user = CustomUser.objects.get(username=username)
             if action == 'follow':
                 Contact.objects.get_or_create(user_from=request.user, user_to=user)
+                create_action(request.user, "is following", user)
             else:
                 Contact.objects.filter(user_from=request.user, user_to=user).delete()
             return JsonResponse({'status': 'ok'})
         except CustomUser.DoesNotExist:
             return JsonResponse({'status':'error'})
     return JsonResponse({'status': 'error'})
+
+
+
+
+
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = [
+    'http://52.195.234.113/',
+    'http://52.195.234.113',
+    'https://52.195.234.113',
+    'https://52.195.234.113/',
+    '52.195.234.113',
+    
+]
+CSRF_TRUSTED_ORIGINS = [
+    'http://52.195.234.113/',
+    'http://52.195.234.113',
+]

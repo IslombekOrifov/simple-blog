@@ -283,23 +283,27 @@ Header START -->
                                 <div class="card-body p-0">
                                     <ul class="list-group list-group-flush list-unstyled p-2">
                                         <!-- Notif item -->
-                                        <li>
-                                            <div class="list-group-item list-group-item-action rounded badge-unread d-flex border-0 mb-1 p-3">
-                                                <div class="avatar text-center d-none d-sm-inline-block">
-                                                    <img class="avatar-img rounded-circle" src="{% if request.user.avatar %}{{ request.user.avatar.url}}{% endif %}" alt="">
-                                                </div>
-                                                <div class="ms-sm-3">
-                                                    <div class=" d-flex">
-                                                    <p class="small mb-2"><b>Judy Nguyen</b> sent you a friend request.</p>
-                                                    <p class="small ms-3 text-nowrap">Just now</p>
-                                                </div>
-                                                <div class="d-flex">
-                                                    <button class="btn btn-sm py-1 btn-primary me-2">Accept </button>
-                                                    <button class="btn btn-sm py-1 btn-danger-soft">Delete </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        </li>
+                                        {% for action in actions %}
+                                            {% with user=action.user %}
+                                                <li>
+                                                    <div class="list-group-item list-group-item-action rounded badge-unread d-flex border-0 mb-1 p-3">
+                                                        <div class="avatar text-center d-none d-sm-inline-block">
+                                                            <img class="avatar-img rounded-circle" {% if user.avatar %}src="{{ user.avatar.url }}"{% else %}src="{% static 'images/avatar/account_default.png'%}"{% endif %} alt="">
+                                                        </div>
+                                                        <div class="ms-sm-3">
+                                                            <div class=" d-flex">
+                                                                <p class="small mb-2"><b><a href='{{ user.get_absolute_url }}'>{{ user.username }}</a> </b> {% if action.target %}<a href='{{ target.get_absolute_url }}'>{{ action.verb }}</a>{% else %}{{ action.verb }}{% endif %}.</p>
+                                                                <p class="small ms-3 text-nowrap">{{ action.created|timesince }}</p>
+                                                            </div>
+                                                            <div class="d-flex">
+                                                                <button class="btn btn-sm py-1 btn-primary me-2">Accept </button>
+                                                                <button class="btn btn-sm py-1 btn-danger-soft">Delete </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                {% endwith %}
+                                        {% endfor %}
                                         <!-- Notif item -->
                                         <li>
                                             <div class="list-group-item list-group-item-action rounded badge-unread d-flex border-0 mb-1 p-3 position-relative">
@@ -344,7 +348,7 @@ Header START -->
                                     </ul>
                                 </div>
                                 <div class="card-footer text-center">
-                                    <a href="#" class="btn btn-sm btn-primary-soft">See all incoming activity</a>
+                                    <a href="{% url 'actions:notif' %}" class="btn btn-sm btn-primary-soft">See all incoming activity</a>
                                 </div>
                             </div>
                         </div>

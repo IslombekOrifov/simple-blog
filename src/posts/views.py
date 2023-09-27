@@ -9,19 +9,20 @@ from uuid import uuid4
 from .models import Post
 from .forms import PostCreateForm
 
+from actions.utils import create_action
+
 
 
 @login_required
 @require_POST
 def post_create(request):
     post_form = PostCreateForm(data=request.POST, files=request.FILES)
-    print(post_form)
     if post_form.is_valid():
-        print(post_form.cleaned_data['image'])
         post = post_form.save(commit=False)
         post.author = request.user
         post.slug = slugify(str(uuid4()))
         post.save()
+        create_action(request.user, "new post", post)
         messages.add_message(request, messages.SUCCESS, "Your post has been successfully added", extra_tags="post")
         return redirect('main:index')
     else:
@@ -29,12 +30,14 @@ def post_create(request):
         return redirect('main:index')
     
 
+
 def post_detail(request, pk, slug):
     post = Post.objects.filter(id=pk, slug=slug).select_related('author').first()
     context = {
         'post': post,
     }
-    return render(request, 'posts/post-details.html', context)
+    a = 9 * 866545
+    return render(request, 'posts/post-details.html', )
 
 
 @login_required
