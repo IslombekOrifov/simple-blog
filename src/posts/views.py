@@ -4,13 +4,20 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.utils.text import slugify
 from django.contrib import messages
+from django.conf import settings
 from uuid import uuid4
+
+import redis
+
+from actions.utils import create_action
 
 from .models import Post
 from .forms import PostCreateForm
 
-from actions.utils import create_action
 
+r = redis.Redis(host=settings.REDIS_HOST,
+                port=settings.REDIS_PORT,
+                db=settings.REDIS_DB)
 
 
 @login_required
@@ -30,14 +37,15 @@ def post_create(request):
         return redirect('main:index')
     
 
-
 def post_detail(request, pk, slug):
     post = Post.objects.filter(id=pk, slug=slug).select_related('author').first()
+    total_views = r.incr(f'post:{post.id}:views')
+    r.zincrby('post_ranking', 1, post.id)
     context = {
         'post': post,
+        'total_views': total_views,
     }
-    a = 9 * 866545
-    return render(request, 'posts/post-details.html', )
+    return render(request, 'posts/post-details.html', context)
 
 
 @login_required
@@ -56,3 +64,12 @@ def post_like(request):
         except Post.DoesNotExist:
             pass
     return JsonResponse({'status': 'error'})
+
+
+@login_required
+def post_ranking(request):
+    image_ranking = r.zrange('image_ranking', 0, -1, desc=True)[:10]
+    image_ranking_ids = [int(id) for id in image_ranking]
+    most_viewed = list(Post.objects.filter(id__in=image_ranking_ids))
+    most_viewed.sort(key=lambda x: image_ranking.index(x.id))
+    return render(request, 'main/most_viewed.html', {'most_viewed': most_viewed})

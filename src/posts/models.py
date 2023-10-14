@@ -34,16 +34,16 @@ class Post(models.Model):
     is_deleted = models.BooleanField(default=False)
 
     views_count = models.PositiveIntegerField(default=0, blank=True)
-
+    total_likes = models.PositiveIntegerField(default=0)
     users_like = models.ManyToManyField(CustomUser, related_name='images_liked', blank=True)
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='posts')
-
 
     class Meta:
         ordering = ('-date_created',)
         unique_together = ('image', 'text', 'date_created',)
         indexes = [
             models.Index(fields=['-date_created', 'slug', 'status']),
+            models.Index(fields=['-total_likes']),
         ]
 
 
@@ -99,6 +99,7 @@ class Like(models.Model):
 
     class Meta:
         ordering = ('-date_created',)
+
 
 
 

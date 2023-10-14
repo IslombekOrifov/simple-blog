@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Count
 
 from posts.models import Post
 from posts.forms import PostCreateForm
@@ -35,6 +36,7 @@ def index(request):
     if posts_only:
         return render(request, 'main/list_posts.html', {'posts': posts})
 
+    # counts = request.user.aggregate(posts_count=Count('posts'))
     context = {
         'post_form': post_form,
         'posts': posts,
